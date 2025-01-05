@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Collaborative Document Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Collaborative Document Editor</h1>
+    </header>
+
+    <main>
+        <section class="editor">
+            <textarea id="editor" placeholder="Start typing..." rows="20"></textarea>
+        </section>
+    </main>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+    <script>
+        // Establish a WebSocket connection using Socket.io
+        const socket = io('http://localhost:3000');
+
+        const editor = document.getElementById('editor');
+
+        // Listen for changes in the editor and send them to the server
+        editor.addEventListener('input', () => {
+            socket.emit('text-change', editor.value);
+        });
+
+        // Listen for changes from the server and update the editor
+        socket.on('text-change', (data) => {
+            editor.value = data;
+        });
+    </script>
+</body>
+</html>
